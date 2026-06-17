@@ -6,13 +6,16 @@ import "./index.css";
 import App from "./App";
 import { CartProvider } from "./context/CartContext";
 import { AuthProvider } from "./context/AuthContext";
+import { ThemeProvider } from "./context/ThemeContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
-    <AuthProvider>
-      <CartProvider>
-        <App />
-      </CartProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <CartProvider>
+          <App />
+        </CartProvider>
+      </AuthProvider>
+    </ThemeProvider>
   </BrowserRouter>
 );

@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../api/api";
 import ProductCard from "../components/ProductCard";
+import Pagination from "../components/Pagination";
+
+const ITEMS_PER_PAGE = 8;
 
 function Products() {
   const { id } = useParams();
@@ -9,6 +12,7 @@ function Products() {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const fetchProducts = async () => {
     try {
@@ -47,7 +51,12 @@ function Products() {
     }
 
     setFilteredProducts(data);
+    setCurrentPage(1); // Reset page on filter change
   }, [products, search, sort, id]);
+
+  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedProducts = filteredProducts.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   const categoryName =
     filteredProducts.length > 0 ? filteredProducts[0]?.category?.name : null;
@@ -105,7 +114,7 @@ function Products() {
       </div>
 
       {/* Products Grid */}
-      {filteredProducts.length === 0 ? (
+      {paginatedProducts.length === 0 ? (
         <div className="bg-white rounded-2xl border border-slate-200/80 p-12 text-center shadow-sm">
           <div className="w-12 h-12 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400 animate-pulse">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -120,11 +129,18 @@ function Products() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {filteredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {paginatedProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        </>
       )}
 
     </div>

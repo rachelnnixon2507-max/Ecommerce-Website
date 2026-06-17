@@ -1,36 +1,100 @@
-# 🛒 E-Commerce Website
+# E-Commerce Website
 
-A full-stack e-commerce application with a **React** frontend and an **ASP.NET Core** backend, featuring product browsing, user authentication, a shopping cart, and an admin dashboard.
+A full-stack e-commerce application built with a React frontend and an ASP.NET Core Web API backend. The app supports product browsing, category filtering, account registration and login, cart management, checkout orders, user order history, and an admin dashboard.
 
----
+## Tech Stack
 
-## 📁 Project Structure
+**Frontend**
+- React 19
+- Vite
+- React Router
+- Axios
+- Tailwind CSS
 
+**Backend**
+- ASP.NET Core Web API
+- Entity Framework Core
+- SQL Server
+- Swagger
+- BCrypt password hashing
+
+## Project Structure
+
+```text
+.
+├── Backend/          # ASP.NET Core Web API
+│   ├── Controllers/  # Auth, products, categories, orders
+│   ├── Data/         # EF Core database context
+│   ├── DTOs/         # Request/response DTOs
+│   ├── Migrations/   # EF Core migrations
+│   └── Models/       # Database entities
+└── frontend/         # React + Vite frontend
+    ├── public/       # Static assets
+    └── src/          # Pages, layouts, components, context, API client
 ```
-/
-├── frontend/       # React + Vite client application
-└── Backend/        # ASP.NET Core Web API
+
+## Features
+
+- Product listing and product details
+- Product filtering by category
+- User registration and login
+- Role-based admin access
+- Shopping cart
+- Order creation and user order history
+- Admin product and category management
+- Admin order status management
+- Swagger API documentation in development
+
+## Prerequisites
+
+- Node.js and npm
+- .NET 10 SDK
+- SQL Server
+- EF Core CLI tools
+
+Install the EF Core CLI if needed:
+
+```bash
+dotnet tool install --global dotnet-ef
 ```
 
----
+## Backend Setup
 
-## ✨ Features
+From the repository root:
 
-- 🏠 **Home Page** – Landing page showcasing featured products
-- 🛍️ **Product Listing** – Browse all products or filter by category
-- 📄 **Product Details** – View detailed info for a single product
-- 🔐 **Authentication** – Register and login with JWT-based auth
-- 🛒 **Shopping Cart** – Add items and manage your cart (requires login)
-- 👤 **User Profile** – View and manage your account
-- 🛠️ **Admin Dashboard** – Manage products and categories (admin only)
+```bash
+cd Backend
+dotnet restore
+dotnet ef database update
+dotnet run
+```
 
----
+The backend runs on:
 
-## 🖥️ Frontend
+```text
+http://localhost:5289
+https://localhost:7277
+```
 
-**Stack:** React 19 · React Router v7 · Axios · Tailwind CSS v4 · Vite
+Swagger is available in development at:
 
-### Getting Started
+```text
+http://localhost:5289/swagger
+```
+
+### Backend Configuration
+
+Update the SQL Server connection string in:
+
+```text
+Backend/appsettings.json
+```
+
+The app uses the `DefaultConnection` connection string for Entity Framework Core.
+
+## Frontend Setup
+
+Open a second terminal from the repository root:
 
 ```bash
 cd frontend
@@ -38,96 +102,79 @@ npm install
 npm run dev
 ```
 
-The app will be available at `http://localhost:5173`.
+The frontend runs on:
 
-### Available Scripts
-
-| Command | Description |
-|---|---|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview production build |
-| `npm run lint` | Lint source files |
-
-### Pages & Routes
-
-| Route | Access | Description |
-|---|---|---|
-| `/` | Public | Home page |
-| `/products` | Public | All products |
-| `/product/:id` | Public | Product detail |
-| `/category/:id` | Public | Products by category |
-| `/login` | Public | Login page |
-| `/register` | Public | Registration page |
-| `/cart` | Auth required | Shopping cart |
-| `/user` | Auth required | User profile |
-| `/admin` | Admin only | Admin dashboard |
-
----
-
-## ⚙️ Backend
-
-**Stack:** ASP.NET Core (.NET 10) · Entity Framework Core · SQL Server · JWT Bearer Auth · AutoMapper · FluentValidation · Swagger
-
-### Getting Started
-
-```bash
-cd Backend
-dotnet restore
-dotnet ef database update   # apply migrations
-dotnet run
+```text
+http://localhost:5173
 ```
 
-Swagger UI will be available at `http://localhost:<port>/swagger`.
+The Axios client is configured in:
 
-### API Controllers
+```text
+frontend/src/api/api.js
+```
 
-| Controller | Endpoint Prefix | Description |
-|---|---|---|
-| `AuthController` | `/api/auth` | Register, login, JWT issuance |
-| `ProductController` | `/api/products` | CRUD for products |
-| `CategoriesController` | `/api/categories` | CRUD for categories |
+By default it points to:
 
-### Configuration
+```text
+http://localhost:5289
+```
 
-Update `appsettings.json` (or `appsettings.Development.json`) with your:
+## Available Frontend Scripts
 
-- **Connection string** – SQL Server database
-- **JWT settings** – Secret key, issuer, audience
+```bash
+npm run dev       # Start the Vite development server
+npm run build     # Build the frontend for production
+npm run preview   # Preview the production build
+npm run lint      # Run ESLint
+```
 
----
+## Main Frontend Routes
 
-## 🚀 Running the Full Stack
+| Route | Access | Description |
+| --- | --- | --- |
+| `/` | Public | Home page |
+| `/products` | Public | Product listing |
+| `/product/:id` | Public | Product details |
+| `/category/:id` | Public | Products filtered by category |
+| `/login` | Public | Login page |
+| `/register` | Public | Registration page |
+| `/cart` | Logged-in users | Shopping cart |
+| `/user` | Logged-in users | User account and orders |
+| `/admin` | Admin users | Admin dashboard |
 
-1. **Start the backend:**
-   ```bash
-   cd Backend && dotnet run
-   ```
+## Main API Endpoints
 
-2. **Start the frontend:**
-   ```bash
-   cd frontend && npm run dev
-   ```
+| Endpoint | Description |
+| --- | --- |
+| `POST /api/auth/register` | Register a user |
+| `POST /api/auth/login` | Login a user |
+| `GET /api/auth/users` | List users |
+| `PUT /api/auth/change-role/{email}` | Change a user's role |
+| `GET /api/products` | List products |
+| `GET /api/products/{id}` | Get one product |
+| `POST /api/products` | Create a product |
+| `PUT /api/products/{id}` | Update a product |
+| `DELETE /api/products/{id}` | Delete a product |
+| `GET /api/categories` | List categories |
+| `GET /api/categories/{id}` | Get one category |
+| `POST /api/categories` | Create a category |
+| `GET /api/orders` | List all orders |
+| `GET /api/orders/user/{userId}` | List orders for one user |
+| `POST /api/orders` | Create an order |
+| `PUT /api/orders/{id}/status` | Update order status |
 
-3. Open `http://localhost:5173` in your browser.
+## Running the Full Stack
 
-> Make sure the API base URL in the frontend (`src/api/`) points to your running backend.
+1. Start SQL Server.
+2. Apply backend migrations with `dotnet ef database update`.
+3. Start the backend from `Backend` with `dotnet run`.
+4. Start the frontend from `frontend` with `npm run dev`.
+5. Open `http://localhost:5173`.
 
----
+## Notes
 
-## 📦 Key Dependencies
-
-### Frontend
-- [React](https://react.dev/) – UI library
-- [React Router DOM](https://reactrouter.com/) – Client-side routing
-- [Axios](https://axios-http.com/) – HTTP client
-- [Tailwind CSS](https://tailwindcss.com/) – Utility-first CSS framework
-- [Vite](https://vitejs.dev/) – Build tool
-
-### Backend
-- [Entity Framework Core](https://learn.microsoft.com/en-us/ef/core/) – ORM
-- [JWT Bearer](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/) – Authentication
-- [AutoMapper](https://automapper.org/) – Object mapping
-- [FluentValidation](https://docs.fluentvalidation.net/) – Input validation
-- [Swashbuckle / Swagger](https://swagger.io/) – API documentation
-- [BCrypt.Net](https://github.com/BcryptNet/bcrypt.net) – Password hashing
+- The first registered account is assigned the `Admin` role.
+- Later accounts are assigned the `User` role by default.
+- The frontend stores authentication and cart state through React context.
+- Build outputs in `Backend/bin`, `Backend/obj`, and `frontend/dist` should not be committed.

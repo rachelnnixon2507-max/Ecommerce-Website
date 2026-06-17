@@ -1,14 +1,53 @@
 import { useCart } from "../context/CartContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../api/api";
+import { useAuth } from "../context/AuthContext";
 
 function Cart() {
   const {
-    cart,
-    removeFromCart,
-    increaseQuantity,
-    decreaseQuantity,
-    getTotal,
-  } = useCart();
+  cart,
+  removeFromCart,
+  increaseQuantity,
+  decreaseQuantity,
+  clearCart,
+  getTotal,
+} = useCart();
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+const handleCheckout = async () => {
+  if (!isAuthenticated()) {
+    alert("Please login before proceeding to checkout.");
+    navigate("/login");
+    return;
+  }
+
+  try {
+    const orderData = {
+      userId: 1, // temporary user id
+      totalAmount: getTotal(),
+      items: cart.map((item) => ({
+        productId: item.id,
+        quantity: item.quantity,
+        unitPrice: item.price,
+      })),
+    };
+
+    const response = await api.post(
+      "/api/orders",
+      orderData
+    );
+
+    alert(
+      `Order placed successfully! Order ID: ${response.data.id}`
+    );
+
+    clearCart();
+  } catch (error) {
+    console.error(error);
+    alert("Failed to place order");
+  }
+};
 
   if (cart.length === 0) {
     return (
@@ -160,14 +199,11 @@ function Cart() {
             </div>
 
             <button
-              onClick={() => alert("Checkout flow is not configured in this demo!")}
-              className="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3.5 px-4 rounded-xl shadow-sm hover:shadow transition duration-200 text-sm flex items-center justify-center gap-2"
-            >
-              Proceed to Checkout
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-              </svg>
-            </button>
+  onClick={handleCheckout}
+  className="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3.5 px-4 rounded-xl shadow-sm hover:shadow transition duration-200 text-sm flex items-center justify-center gap-2"
+>
+  Proceed to Checkout
+</button>
 
           </div>
         </div>
