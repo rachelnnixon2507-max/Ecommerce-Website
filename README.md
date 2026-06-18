@@ -1,66 +1,194 @@
 # E-Commerce Website
 
-A full-stack e-commerce application built with a React frontend and an ASP.NET Core Web API backend. The app supports product browsing, category filtering, account registration and login, cart management, checkout orders, user order history, and an admin dashboard.
+A full-stack e-commerce application built with a React frontend and an ASP.NET Core Web API backend. The application supports product browsing, category filtering, authentication, shopping cart management, order processing, user order history, and a complete admin dashboard.
 
 ## Tech Stack
 
-**Frontend**
+### Frontend
 - React 19
 - Vite
 - React Router
 - Axios
 - Tailwind CSS
+- Context API
+- Local Storage (theme persistence)
 
-**Backend**
+### Backend
 - ASP.NET Core Web API
 - Entity Framework Core
 - SQL Server
 - Swagger
-- BCrypt password hashing
+- BCrypt Password Hashing
 
 ## Project Structure
 
 ```text
 .
-├── Backend/          # ASP.NET Core Web API
-│   ├── Controllers/  # Auth, products, categories, orders
-│   ├── Data/         # EF Core database context
-│   ├── DTOs/         # Request/response DTOs
-│   ├── Migrations/   # EF Core migrations
-│   └── Models/       # Database entities
-└── frontend/         # React + Vite frontend
-    ├── public/       # Static assets
-    └── src/          # Pages, layouts, components, context, API client
+├── Backend/
+│   ├── Controllers/
+│   ├── Data/
+│   ├── DTOs/
+│   ├── Migrations/
+│   └── Models/
+└── frontend/
+    ├── public/
+    └── src/
+        ├── api/
+        ├── components/
+        ├── context/
+        ├── layouts/
+        ├── pages/
+        └── routes/
 ```
 
 ## Features
 
-- Product listing and product details
-- Product filtering by category
+### Customer Features
+
+- Browse products and categories
+- View detailed product information
 - User registration and login
-- Role-based admin access
-- Shopping cart
-- Order creation and user order history
-- Admin product and category management
-- Admin order status management
-- Swagger API documentation in development
+- Shopping cart management
+- Secure checkout process
+- Order history tracking
+- Responsive design for desktop, tablet, and mobile devices
+- Dark Mode / Light Mode support with persistent theme settings
+
+### Authentication Features
+
+- JWT-based authentication
+- Role-based authorization
+- Login-required protection for cart and checkout actions
+- Automatic redirection to login when required
+
+### Shopping Cart Features
+
+- Add products to cart
+- Update quantities
+- Remove products from cart
+- Cart persistence
+- Login validation before cart operations
+
+### Order Features
+
+- Create orders
+- View user orders
+- Admin order management
+- Changeable order statuses:
+  - Pending
+  - Shipped
+  - Delivered
+  - Cancelled
+- Color-coded status badges
+
+### Admin Features
+
+- Admin dashboard
+- Product management (Create, Read, Update, Delete)
+- Category management
+- Order management
+- Order status updates
+- User role management
+- Cart hidden for admin users
+
+### UI / UX Enhancements
+
+- Dark Mode / Light Mode toggle in navbar
+- Theme persistence using localStorage
+- Responsive navigation
+- Pagination for products and orders
+- Previous / Next page navigation
+- Optimized page loading performance
+- Clean and modern user interface
+
+## Newly Added Features
+
+### 1. Dark Mode / Light Mode
+
+Users can switch between dark and light themes using the navbar theme toggle.
+
+**Features**
+- Theme switch button in navbar
+- Stored in localStorage
+- Automatically applied across all pages
+- Persistent across browser sessions
+
+### 2. Changeable Order Status
+
+Admins can update order status directly from the order management page.
+
+**Supported Statuses**
+- Pending
+- Shipped
+- Delivered
+- Cancelled
+
+**Status Badge Colors**
+| Status | Color |
+|----------|----------|
+| Pending | Yellow |
+| Shipped | Blue |
+| Delivered | Green |
+| Cancelled | Red |
+
+### 3. Pagination
+
+Pagination is implemented for large datasets.
+
+**Applies To**
+- Product listings
+- Admin orders page
+
+**Features**
+- Previous button
+- Next button
+- Page number navigation
+- Limited records per page
+
+### 4. Admin Cart Restrictions
+
+Admin users do not have access to shopping cart functionality.
+
+**Behavior**
+- Cart icon hidden
+- Cart page hidden
+- Existing user functionality remains unchanged
+
+### 5. Login Required for Add to Cart
+
+Unauthenticated users attempting to add products to the cart will see:
+
+```text
+Please login to add products to your cart.
+```
+
+The action is blocked until login.
+
+### 6. Login Required for Checkout
+
+Unauthenticated users attempting to checkout will see:
+
+```text
+Please login before proceeding to checkout.
+```
+
+After confirmation, users are redirected to the login page.
 
 ## Prerequisites
 
-- Node.js and npm
-- .NET 10 SDK
+- Node.js
+- npm
+- .NET SDK
 - SQL Server
-- EF Core CLI tools
+- EF Core CLI
 
-Install the EF Core CLI if needed:
+Install EF Core CLI if needed:
 
 ```bash
 dotnet tool install --global dotnet-ef
 ```
 
 ## Backend Setup
-
-From the repository root:
 
 ```bash
 cd Backend
@@ -69,32 +197,28 @@ dotnet ef database update
 dotnet run
 ```
 
-The backend runs on:
+Backend URLs:
 
 ```text
 http://localhost:5289
 https://localhost:7277
 ```
 
-Swagger is available in development at:
+Swagger:
 
 ```text
 http://localhost:5289/swagger
 ```
 
-### Backend Configuration
+### Configuration
 
-Update the SQL Server connection string in:
+Update the connection string in:
 
 ```text
 Backend/appsettings.json
 ```
 
-The app uses the `DefaultConnection` connection string for Entity Framework Core.
-
 ## Frontend Setup
-
-Open a second terminal from the repository root:
 
 ```bash
 cd frontend
@@ -102,79 +226,97 @@ npm install
 npm run dev
 ```
 
-The frontend runs on:
+Frontend URL:
 
 ```text
 http://localhost:5173
 ```
 
-The Axios client is configured in:
+API configuration file:
 
 ```text
 frontend/src/api/api.js
 ```
 
-By default it points to:
+## Frontend Routes
 
-```text
-http://localhost:5289
-```
-
-## Available Frontend Scripts
-
-```bash
-npm run dev       # Start the Vite development server
-npm run build     # Build the frontend for production
-npm run preview   # Preview the production build
-npm run lint      # Run ESLint
-```
-
-## Main Frontend Routes
-
-| Route | Access | Description |
-| --- | --- | --- |
-| `/` | Public | Home page |
-| `/products` | Public | Product listing |
-| `/product/:id` | Public | Product details |
-| `/category/:id` | Public | Products filtered by category |
-| `/login` | Public | Login page |
-| `/register` | Public | Registration page |
-| `/cart` | Logged-in users | Shopping cart |
-| `/user` | Logged-in users | User account and orders |
-| `/admin` | Admin users | Admin dashboard |
+| Route | Access |
+|---------|---------|
+| / | Public |
+| /products | Public |
+| /product/:id | Public |
+| /category/:id | Public |
+| /login | Public |
+| /register | Public |
+| /cart | User Only |
+| /user | Authenticated User |
+| /admin | Admin Only |
 
 ## Main API Endpoints
 
-| Endpoint | Description |
-| --- | --- |
-| `POST /api/auth/register` | Register a user |
-| `POST /api/auth/login` | Login a user |
-| `GET /api/auth/users` | List users |
-| `PUT /api/auth/change-role/{email}` | Change a user's role |
-| `GET /api/products` | List products |
-| `GET /api/products/{id}` | Get one product |
-| `POST /api/products` | Create a product |
-| `PUT /api/products/{id}` | Update a product |
-| `DELETE /api/products/{id}` | Delete a product |
-| `GET /api/categories` | List categories |
-| `GET /api/categories/{id}` | Get one category |
-| `POST /api/categories` | Create a category |
-| `GET /api/orders` | List all orders |
-| `GET /api/orders/user/{userId}` | List orders for one user |
-| `POST /api/orders` | Create an order |
-| `PUT /api/orders/{id}/status` | Update order status |
+| Method | Endpoint |
+|----------|----------|
+| POST | /api/auth/register |
+| POST | /api/auth/login |
+| GET | /api/auth/users |
+| PUT | /api/auth/change-role/{email} |
+| GET | /api/products |
+| GET | /api/products/{id} |
+| POST | /api/products |
+| PUT | /api/products/{id} |
+| DELETE | /api/products/{id} |
+| GET | /api/categories |
+| POST | /api/categories |
+| GET | /api/orders |
+| GET | /api/orders/user/{userId} |
+| POST | /api/orders |
+| PUT | /api/orders/{id}/status |
 
-## Running the Full Stack
+## Running the Application
 
 1. Start SQL Server.
-2. Apply backend migrations with `dotnet ef database update`.
-3. Start the backend from `Backend` with `dotnet run`.
-4. Start the frontend from `frontend` with `npm run dev`.
-5. Open `http://localhost:5173`.
+2. Run database migrations.
 
-## Notes
+```bash
+dotnet ef database update
+```
 
-- The first registered account is assigned the `Admin` role.
-- Later accounts are assigned the `User` role by default.
-- The frontend stores authentication and cart state through React context.
-- Build outputs in `Backend/bin`, `Backend/obj`, and `frontend/dist` should not be committed.
+3. Start backend.
+
+```bash
+cd Backend
+dotnet run
+```
+
+4. Start frontend.
+
+```bash
+cd frontend
+npm run dev
+```
+
+5. Open:
+
+```text
+http://localhost:5173
+```
+
+## Security Notes
+
+- Passwords are hashed using BCrypt.
+- Role-based route protection is enforced.
+- Admin-only management screens are secured.
+- Login validation is required before cart and checkout actions.
+
+## Future Improvements
+
+- Payment gateway integration
+- Product reviews and ratings
+- Wishlist functionality
+- Email notifications
+- Advanced search and filtering
+- Sales analytics dashboard
+
+## License
+
+This project is intended for educational and portfolio purposes.
