@@ -10,7 +10,8 @@ import Register from "./pages/Register";
 import Admin from "./pages/Admin";
 import UserPage from "./pages/UserPage";
 import { RequireAuth, RequireAdmin } from "./components/RequireAuth";
-
+import MyOrders from "./pages/MyOrders";
+import OrderActions from "./pages/OrderActions";
 function App() {
   return (
     <Routes>
@@ -27,6 +28,8 @@ function App() {
         <Route element={<RequireAuth />}>
           <Route path="/cart" element={<Cart />} />
           <Route path="/user" element={<UserPage />} />
+          <Route path="/my-orders" element={<MyOrders />} />
+          <Route path="/order-actions" element={<OrderActions />} />
         </Route>
 
         {/* Admin Only */}

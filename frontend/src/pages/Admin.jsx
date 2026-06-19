@@ -42,24 +42,65 @@ function Admin() {
   const [product, setProduct] = useState({
     name: "", description: "", price: "", stock: "", imageUrl: "", categoryId: 1,
   });
-
-  useEffect(() => {
+  const [admin, setAdmin] = useState(null);
+ useEffect(() => {
+  if (activeTab === "products" && products.length === 0) {
     fetchProducts();
+  }
+
+  if (activeTab === "users" && users.length === 0) {
     fetchUsers();
+  }
+
+  console.log(activeTab)
+
+  if (activeTab === "orders" && orders.length === 0) {
     fetchOrders();
-  }, []);
+  }
+}, [activeTab]);
+
+<div className="flex gap-4 mb-4">
+  <button onClick={() => setActiveTab("products")}>
+    Products
+  </button>
+
+  <button onClick={() => setActiveTab("user")}>
+    Categories
+  </button>
+
+  <button onClick={() => setActiveTab("orders")}> 
+    Orders
+  </button>
+</div>
+
+
 
   /* ── Fetch helpers ── */
   const fetchProducts = async () => {
     try { const res = await api.get("/api/products"); setProducts(res.data); }
     catch (err) { console.log(err); }
   };
-  const fetchUsers = async () => {
-    try { const res = await api.get("/api/auth/users"); setUsers(res.data); }
-    catch (err) { console.log(err); }
-  };
+  const fetchAdmin = async () => {
+  try {
+    const res = await api.get("/api/auth/users");
+
+    const admin = res.data.find(
+      user => user.role === "Admin"
+    );
+
+    console.log(admin);
+    setAdmin(admin);
+  } catch (err) {
+    console.log(err);
+  }
+};
   const fetchOrders = async () => {
     try { const res = await api.get("/api/orders"); setOrders(res.data); }
+    catch (err) { console.log(err); }
+  };
+
+    const fetchUsers = async () => {
+    try { const res = await api.get("/api/auth/users"); setUsers(res.data); }
     catch (err) { console.log(err); }
   };
 
@@ -113,6 +154,15 @@ function Admin() {
     setEditingId(null);
     setProduct({ name: "", description: "", price: "", stock: "", imageUrl: "", categoryId: 1 });
   };
+  const STATUS_STYLES = {
+  Pending: "bg-orange-100 text-orange-700",
+  Shipped: "bg-blue-100 text-blue-700",
+  Delivered: "bg-green-100 text-green-700",
+  Cancelled: "bg-red-100 text-red-700",
+  "Return Requested": "bg-yellow-100 text-yellow-700",
+  "Replacement Requested": "bg-purple-100 text-purple-700",
+};
+
 
   /* ── Users ── */
   const changeRole = async (email, role) => {

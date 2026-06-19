@@ -90,7 +90,54 @@ public class OrdersController : ControllerBase
 
         return Ok(new { order.Id, order.Status });
     }
+// c
 
+
+[HttpPut("{id}/cancel")]
+public async Task<IActionResult> CancelOrder(int id)
+{
+    var order = await _context.Orders.FindAsync(id);
+
+    if (order == null)
+        return NotFound();
+
+    order.Status = "Cancelled";
+
+    await _context.SaveChangesAsync();
+
+    return Ok(order);
+}
+
+[HttpPut("{id}/return")]
+public async Task<IActionResult> ReturnOrder(int id)
+{
+    var order = await _context.Orders.FindAsync(id);
+
+    if (order == null)
+        return NotFound();
+
+    order.Status = "Return Requested";
+
+    await _context.SaveChangesAsync();
+
+    return Ok(order);
+}
+
+[HttpPut("{id}/replacement")]
+public async Task<IActionResult> ReplacementOrder(int id)
+{
+    var order = await _context.Orders.FindAsync(id);
+
+    if (order == null)
+        return NotFound();
+
+    order.Status = "Replacement Requested";
+
+    await _context.SaveChangesAsync();
+
+    return Ok(order);
+}
+//c
     // POST: api/orders — create order
     [HttpPost]
     public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto dto)

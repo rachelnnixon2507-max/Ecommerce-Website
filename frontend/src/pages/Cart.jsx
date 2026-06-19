@@ -12,7 +12,7 @@ function Cart() {
   clearCart,
   getTotal,
 } = useCart();
-  const { isAuthenticated } = useAuth();
+const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
 const handleCheckout = async () => {
@@ -24,7 +24,7 @@ const handleCheckout = async () => {
 
   try {
     const orderData = {
-      userId: 1, // temporary user id
+      userId: user.id,
       totalAmount: getTotal(),
       items: cart.map((item) => ({
         productId: item.id,

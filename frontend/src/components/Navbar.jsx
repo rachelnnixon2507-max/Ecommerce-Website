@@ -52,7 +52,11 @@ function Navbar() {
             <Link to="/products" className={navLinkClass("/products")}>
               Products
             </Link>
-
+              
+                {user && user.role !== "Admin" && (
+                <Link to="/my-orders">My Orders</Link>
+                  )}
+              
             {isAuthenticated() && !isAdmin() && (
               <Link to="/cart" className={navLinkClass("/cart")}>
                 <svg
