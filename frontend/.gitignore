@@ -1,89 +1,201 @@
-# ===========================
-# Dependencies
-# ===========================
+# =============================================================
+#  Rachel's Store — .gitignore
+#  Place this file at the ROOT of your repo (next to /Backend
+#  and /frontend folders)
+# =============================================================
+
+
+# =============================================================
+# 🔐 SECRETS & SENSITIVE CONFIG  ← MOST IMPORTANT SECTION
+# =============================================================
+
+# ASP.NET Core appsettings — contain DB password, JWT key,
+# Gmail app-password, and Stripe secret key. NEVER commit these.
+Backend/appsettings.json
+Backend/appsettings.Production.json
+Backend/appsettings.*.json
+
+# Keep the Development template but strip secrets before committing:
+# Backend/appsettings.Development.json   ← only ignore if it has secrets too
+
+# Frontend environment files — contain Stripe publishable key & API URL
+frontend/.env
+frontend/.env.local
+frontend/.env.production
+frontend/.env.staging
+frontend/.env.*.local
+
+# User-secrets (dotnet user-secrets store)
+Backend/**/*.secrets.json
+**/secrets.json
+
+# Any file accidentally named with common secret patterns
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+**/*.cer
+**/*.crt
+**/*.cert
+**/*.keystore
+
+
+# =============================================================
+# 🟦 ASP.NET CORE / .NET BACKEND
+# =============================================================
+
+# Build output
+Backend/bin/
+Backend/obj/
+
+# Rider / Visual Studio user-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+
+# NuGet packages (restored automatically via dotnet restore)
+*.nupkg
+**/packages/
+!**/packages/build/
+nuget.config
+
+# Publish output
+Backend/publish/
+Backend/out/
+
+# Test results
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# Entity Framework Core migrations snapshot is safe to commit,
+# but exclude any auto-generated SQL scripts you may have dumped
+*.sql
+
+# IIS Express
+.vs/config/applicationhost.config
+.vs/ElmahIo.Client.Web/v16/
+
+
+# =============================================================
+# ⚛️  REACT / VITE FRONTEND
+# =============================================================
+
+# Dependencies — restored via npm install
+frontend/node_modules/
+
+# Vite production build output
+frontend/dist/
+frontend/.vite/
+
+# TypeScript build info (if you add TS later)
+frontend/tsconfig.tsbuildinfo
+
+# Local Vite cache
+frontend/.cache/
+
+# ESLint cache
+frontend/.eslintcache
+
+# Storybook build (if you add it)
+frontend/storybook-static/
+
+
+# =============================================================
+# 📦 NODE / NPM (Backend also has package.json)
+# =============================================================
+
 node_modules/
-.pnp
-.pnp.js
-
-# ===========================
-# Build Outputs
-# ===========================
-dist/
-dist-ssr/
-build/
-out/
-
-# ===========================
-# Vite Cache
-# ===========================
-.vite/
-vite.config.js.timestamp-*
-
-# ===========================
-# Environment Variables
-# ===========================
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-.env.*.local
-
-# ===========================
-# Logs
-# ===========================
-logs/
-*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-lerna-debug.log*
+.pnp
+.pnp.js
 
-# ===========================
-# OS Files
-# ===========================
+# Lock files — it's best practice to COMMIT these so CI gets
+# exact versions. Only ignore if your team deliberately chose not to.
+# package-lock.json
+# yarn.lock
+
+
+# =============================================================
+# 🖥️  OS FILES
+# =============================================================
+
+# macOS
 .DS_Store
-.DS_Store?
+.AppleDouble
+.LSOverride
 ._*
 .Spotlight-V100
 .Trashes
-ehthumbs.db
-Thumbs.db
 
-# ===========================
-# Editor & IDE
-# ===========================
-.vscode/*
-!.vscode/extensions.json
-!.vscode/settings.json
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+
+# =============================================================
+# 🛠️  EDITORS & IDEs
+# =============================================================
+
+# Visual Studio Code
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
+.vscode/*.code-snippets
+# (keep .vscode/extensions.json if you want to share recommended extensions)
+
+# JetBrains (Rider, WebStorm)
 .idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+*.iml
+
+# Vim / Emacs
 *.swp
 *.swo
-*.sublime-project
-*.sublime-workspace
+*~
+\#*\#
 
-# ===========================
-# TypeScript
-# ===========================
-*.tsbuildinfo
 
-# ===========================
-# Testing
-# ===========================
-coverage/
-.nyc_output/
+# =============================================================
+# 📋 LOGS & RUNTIME FILES
+# =============================================================
 
-# ===========================
-# Misc
-# ===========================
-*.local
-*.orig
-.cache/
-.temp/
-tmp/
+logs/
+*.log
+*.log.*
+nohup.out
+
+# ASP.NET Data Protection keys (auto-generated at runtime)
+Backend/DataProtection-Keys/
+
+
+# =============================================================
+# 🐳 DOCKER (if you add containers later)
+# =============================================================
+
+.dockerignore
+docker-compose.override.yml
+
+
+# =============================================================
+# ✅  WHAT TO KEEP / COMMIT  (reference — not gitignore rules)
+# =============================================================
+# ✔  Backend/appsettings.Development.json  — only if you REMOVE
+#    all real passwords first (use placeholder values)
+# ✔  frontend/.env.example                 — already in your project,
+#    shows which variables are needed without real values
+# ✔  Backend/Migrations/                   — EF Core migrations
+# ✔  Backend/Backend.csproj
+# ✔  frontend/package.json + package-lock.json
+# ✔  All .cs, .jsx, .js, .css source files
+# ✔  README.md

@@ -68,8 +68,9 @@ public IActionResult Register(RegisterRequestDto request)
     });
 }
     
+    [Authorize(Roles = "Admin")]
     [HttpPut("change-role/{email}")]
-public IActionResult ChangeRole(
+    public IActionResult ChangeRole(
     string email,
     [FromQuery] string role)
 {
@@ -153,7 +154,7 @@ return Ok(new
     user.Role
 });
 } // GET USERS
-    // [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     [HttpGet("users")]
     public IActionResult GetUsers()
     {

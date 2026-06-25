@@ -33,6 +33,7 @@ function UserPage() {
 
   const quickActions = [
     { to: "/products", label: "Browse Catalogue", icon: "🛍️", color: "from-blue-50 to-indigo-50 text-blue-700 border-blue-100 hover:border-blue-300" },
+    { to: "/my-orders", label: "My Orders", icon: "📦", color: "from-emerald-50 to-teal-50 text-emerald-700 border-emerald-100 hover:border-emerald-300" },
     ...(user.role !== "Admin" 
       ? [{ to: "/cart", label: "My Cart", icon: "🛒", color: "from-purple-50 to-fuchsia-50 text-purple-700 border-purple-100 hover:border-purple-300" }]
       : []),

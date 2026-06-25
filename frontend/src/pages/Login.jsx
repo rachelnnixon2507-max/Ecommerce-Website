@@ -24,7 +24,9 @@ function Login() {
         navigate("/user");
       }
     } catch (err) {
-      setError(err.response?.data || "Invalid email or password. Please try again.");
+      const errData = err.response?.data;
+      const msg = typeof errData === "string" ? errData : errData?.message || "Invalid email or password. Please try again.";
+      setError(msg);
     } finally { 
       setLoading(false);
     }

@@ -1,7 +1,0 @@
-SELECT TOP (1000) [Id]
-      ,[Name]
-      ,[Email]
-      ,[PasswordHash]
-      ,[Role]
-      ,[CreatedDate]
-  FROM [SelfStudyDB].[dbo].[Users]

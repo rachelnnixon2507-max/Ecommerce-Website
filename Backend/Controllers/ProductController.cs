@@ -1,5 +1,6 @@
 using Backend.Data;
 using Backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,8 +43,9 @@ public class ProductsController : ControllerBase
     }
 
     // POST: api/products
+    [Authorize(Roles = "Admin")]
     [HttpPost]
-public async Task<ActionResult<Product>> CreateProduct(Product product)
+    public async Task<ActionResult<Product>> CreateProduct(Product product)
 {
     if (product.CategoryId.HasValue)
     {
@@ -64,6 +66,7 @@ public async Task<ActionResult<Product>> CreateProduct(Product product)
 }
         
     // DELETE: api/products/1
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProduct(int id)
     {
@@ -77,8 +80,9 @@ public async Task<ActionResult<Product>> CreateProduct(Product product)
 
         return Ok("Deleted successfully");
     }
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
-public async Task<IActionResult> UpdateProduct(
+    public async Task<IActionResult> UpdateProduct(
     int id,
     Product updatedProduct)
 {
